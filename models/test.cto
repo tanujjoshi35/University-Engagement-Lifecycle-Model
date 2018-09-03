@@ -1,0 +1,143 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Sample business network definition.
+ */
+namespace test
+
+
+concept Courses{
+  o String CName
+  o String CPayment
+  o String Duration
+}
+
+concept Test{
+  o Double score
+  
+}
+
+enum Partners{
+  o Partner_Delivery
+  o Partner_Labs
+  o Partner_Project
+}
+
+enum Endorse{
+  o True
+  o False
+}
+
+enum Transport{
+  o CAR
+  o BUS
+}
+
+asset UniversityAccount identified by accountId {
+o String accountId
+--> University owner
+o Double balance
+o Double timePeriod
+}
+
+asset StudentAccount identified by PortalID{
+  o String PortalID
+  o Double balance
+  o Courses c
+  o Double timePeriod
+}
+  
+
+
+asset TrainingInstituteAccount identified by accountId {
+o String accountId
+--> TrainingInstitute owner
+o Double balance
+o Double timePeriod
+}
+
+asset TrainingPartnerAccount identified by accountId {
+o String accountId
+--> TrainingPartner owner
+o Double balance
+}
+
+participant Student identified by sapID{
+ o String sapID
+ o String Name
+}
+
+
+participant University identified by uid {
+o String uid
+o String Name
+}
+
+participant TrainingInstitute identified by tid {
+o String tid
+o String Name
+}
+
+participant TrainingPartner identified by tpid {
+o String tpid
+o String Name
+ o Partners ptype optional
+}
+
+transaction StudentToUniversity{
+  --> StudentAccount from
+  --> StudentAccount to
+  o Double Amount
+}
+
+transaction UniversityToTrainingInstitute {
+--> UniversityAccount from
+--> TrainingInstituteAccount to
+o Double amount
+}
+
+transaction TrainingInstitueToTrainingPartner {
+--> TrainingInstituteAccount from
+--> TrainingPartnerAccount to
+o Double amount
+}
+
+transaction RefundUniversityToStudent{
+  -->UniversityAccount from
+  -->StudentAccount to
+  o Double amount
+}
+
+transaction RefundInstituteToUniversity{
+  -->TrainingInstituteAccount from
+  --> UniversityAccount to
+   o Double amount
+}
+
+
+
+
+
+transaction LatePaymentStudentToUniversity{
+  --> StudentAccount from
+  --> UniversityAccount to
+  o Double amount
+}
+
+transaction LatePaymentUniversityToTrainingInstitute{
+  --> UniversityAccount from
+  --> TrainingInstitute to
+  o Double amount
+}
